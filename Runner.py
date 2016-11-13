@@ -1,4 +1,5 @@
 import sys
+import time
 
 from MyStrategy import MyStrategy
 from RemoteProcessClient import RemoteProcessClient
@@ -11,8 +12,15 @@ class Runner:
             self.remote_process_client = RemoteProcessClient(sys.argv[1], int(sys.argv[2]))
             self.token = sys.argv[3]
         else:
-            self.remote_process_client = RemoteProcessClient("127.0.0.1", 31001)
+            self.tryConnect()
             self.token = "0000000000000000"
+
+    def tryConnect(self):
+        try:
+            self.remote_process_client = RemoteProcessClient("127.0.0.1", 31001)
+        except Exception:
+            time.sleep(1)
+            self.tryConnect()
 
     def run(self):
         try:
